@@ -25,5 +25,5 @@ The app offers the following features to enhance your tourism experience:
 - Create a personalized Favorites List and save your most loved experiences.
 - Easily access and revisit your favorite places whenever you want.
 
-Explore cities, discover amazing experiences, and make the most of your travel adventures with Tourism-Experiences-iOS.
+Explore the city, discover amazing experiences, and make the most of your travel adventures.
 
