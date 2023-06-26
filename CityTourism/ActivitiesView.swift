@@ -40,9 +40,9 @@ struct ActivitiesView: View {
     var body: some View {
         NavigationView{
             VStack{
-            Toggle("Favourites", isOn: $favouritesOnly)
-                    .padding(.vertical, 10)
-                    .padding(.horizontal, 20)
+//            Toggle("Favourites", isOn: $favouritesOnly)
+//                    .padding(.vertical, 10)
+//                    .padding(.horizontal, 20)
             List(activities, id: \.name) { activity in
                 NavigationLink(destination: ActivityDetailsView(activity: activity, currentUser: currentUser!)) {
                     HStack {
@@ -61,7 +61,7 @@ struct ActivitiesView: View {
                             Text("★ \(activity.starRating)/5")
                                 .font(.subheadline)
                             Spacer()
-                        }.padding()
+                        }.padding(.vertical)
                     }// hstack
                 } //navlink
             } //list
@@ -77,27 +77,27 @@ struct ActivitiesView: View {
         }//vstack
             .navigationTitle("Toronto Experiences")
             .navigationBarItems(trailing: logoutButton)
-        }
-        .navigationBarBackButtonHidden(true)
-        .onAppear{
+//            .navigationBarTitleDisplayMode(.large)
+//            .frame(maxWidth: .infinity)
+//            .padding(.vertical, 10)
+        }// navView
+//        .onAppear{
 //            favouritesOnly = false
 //            activities = activitiesFilter()
-        }
-    }
+//        }
+        
+    }//body
     private var logoutButton: some View {
         Button(action: {
             logout()
         }) {
             Text("Logout")
+                .foregroundColor(.red)
+            Image(systemName: "power")
+                .foregroundColor(.red)
         }
     }
-    
-//    private func activitiesFilter()-> [Activity]{
-//        guard let currentUser = currentUser, favouritesOnly else {
-//            return activitiesSet
-//        }
-//        return activitiesSet.filter { currentUser.preferences.favorites.contains($0.name) }
-//    }
+
     private func logout() {
         UserDefaults.standard.removeObject(forKey: "CurrentUser")
         UserDefaults.standard.removeObject(forKey: "RememberMe")

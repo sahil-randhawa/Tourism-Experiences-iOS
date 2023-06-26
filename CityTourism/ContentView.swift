@@ -79,7 +79,7 @@ struct ContentView: View {
                     Toggle("Remember Me", isOn: $rememberMe)
                         .padding()
                     
-                    NavigationLink(destination: ActivitiesView(isLoggedIn: $isLoggedIn), isActive: $isLoggedIn) { // Use isLoggedIn binding
+                    NavigationLink(destination: TabbedView(isLoggedIn: $isLoggedIn), isActive: $isLoggedIn) { // Use isLoggedIn binding
                     }
                     .hidden()
                     

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF0CDCAF2A49434300DC89A0 /* TabbedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0CDCAE2A49434300DC89A0 /* TabbedView.swift */; };
+		BF0CDCB12A49439B00DC89A0 /* FavouritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0CDCB02A49439B00DC89A0 /* FavouritesView.swift */; };
 		BF6F8D542A3A3B6C00CAB82C /* CityTourismApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6F8D532A3A3B6C00CAB82C /* CityTourismApp.swift */; };
 		BF6F8D562A3A3B6C00CAB82C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6F8D552A3A3B6C00CAB82C /* ContentView.swift */; };
 		BF6F8D582A3A3B6E00CAB82C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF6F8D572A3A3B6E00CAB82C /* Assets.xcassets */; };
@@ -18,6 +20,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BF0CDCAE2A49434300DC89A0 /* TabbedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbedView.swift; sourceTree = "<group>"; };
+		BF0CDCB02A49439B00DC89A0 /* FavouritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesView.swift; sourceTree = "<group>"; };
 		BF6F8D502A3A3B6C00CAB82C /* CityTourism.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CityTourism.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF6F8D532A3A3B6C00CAB82C /* CityTourismApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityTourismApp.swift; sourceTree = "<group>"; };
 		BF6F8D552A3A3B6C00CAB82C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -67,6 +71,8 @@
 				BF6F8D632A3A4ADE00CAB82C /* Activity.swift */,
 				BF6F8D652A3A555E00CAB82C /* ActivitiesView.swift */,
 				BF6F8D672A3A6AAB00CAB82C /* ActivityDetailsView.swift */,
+				BF0CDCAE2A49434300DC89A0 /* TabbedView.swift */,
+				BF0CDCB02A49439B00DC89A0 /* FavouritesView.swift */,
 			);
 			path = CityTourism;
 			sourceTree = "<group>";
@@ -151,10 +157,12 @@
 			files = (
 				BF6F8D562A3A3B6C00CAB82C /* ContentView.swift in Sources */,
 				BF6F8D542A3A3B6C00CAB82C /* CityTourismApp.swift in Sources */,
+				BF0CDCB12A49439B00DC89A0 /* FavouritesView.swift in Sources */,
 				BF6F8D642A3A4ADE00CAB82C /* Activity.swift in Sources */,
 				BF6F8D622A3A3FE000CAB82C /* User.swift in Sources */,
 				BF6F8D682A3A6AAB00CAB82C /* ActivityDetailsView.swift in Sources */,
 				BF6F8D662A3A555E00CAB82C /* ActivitiesView.swift in Sources */,
+				BF0CDCAF2A49434300DC89A0 /* TabbedView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
