@@ -9,8 +9,26 @@ import SwiftUI
 
 struct TabbedView: View {
     
-    
     @Binding var isLoggedIn: Bool
+    @EnvironmentObject var activityData: ActivityData
+    
+    // currently logged user
+    var currentUser: User? = {
+        guard let userData = UserDefaults.standard.data(forKey: "CurrentUser"),
+              let user = try? PropertyListDecoder().decode(User.self, from: userData)
+        else {
+            return nil
+        }
+        print(user.email)
+        return user
+    }()
+    
+    var favActivities: [Activity] {
+        guard let currentUser = currentUser else {
+            return activityData.activities
+        }
+        return activityData.activities.filter { currentUser.preferences.favorites.contains($0.name) }
+    }
     
     var body: some View {
         NavigationView{
@@ -23,7 +41,7 @@ struct TabbedView: View {
                         }
                         .padding(20)
                     }
-                FavouritesView(isLoggedIn: $isLoggedIn)
+                FavouritesView(isLoggedIn: $isLoggedIn, activities: favActivities)
                     .tabItem {
                         VStack{
                             Image(systemName: "heart.fill")
@@ -33,6 +51,7 @@ struct TabbedView: View {
                     }
             } //tabview
         }//navView
+        .environmentObject(activityData)
 //        .navigationBarItems(trailing: logoutButton)
         .navigationBarBackButtonHidden(true)
         

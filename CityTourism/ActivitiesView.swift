@@ -13,7 +13,8 @@ struct ActivitiesView: View {
     
     @State private var favouritesOnly: Bool = false
     
-    @State private var activitiesSet = ActivityData.shared.activities
+//    @State private var activitiesSet = ActivityData.shared.activities
+    @EnvironmentObject var activityData: ActivityData
     
     // currently logged user
     var currentUser: User? = {
@@ -28,9 +29,12 @@ struct ActivitiesView: View {
     
     var activities: [Activity] {
         guard let currentUser = currentUser, favouritesOnly else {
-            return activitiesSet
+            return activityData.activities
         }
-        return activitiesSet.filter { currentUser.preferences.favorites.contains($0.name) }
+        return activityData.activities.filter { currentUser.preferences.favorites.contains($0.name) }
+    }
+    func setFav(){
+        activityData.favAct = activityData.activities.filter { currentUser!.preferences.favorites.contains($0.name) }
     }
 
     @Binding var isLoggedIn: Bool

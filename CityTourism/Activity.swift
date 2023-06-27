@@ -29,5 +29,7 @@ class ActivityData:ObservableObject {
         Activity(name: "Art Gallery of Ontario", price: "$25", photo: ["ago1", "ago2", "ago3"], description: "The Art Gallery of Ontario is an art museum in Toronto, Ontario, Canada. It is one of the largest art museums in North America and houses a diverse collection of over 95,000 works spanning various periods and styles. The AGO is located in downtown Toronto's Grange Park neighborhood.", starRating: 4, host: "Art Enthusiasts")
 
     ]
+    
+    @Published var favAct: [Activity] = []
 }
 

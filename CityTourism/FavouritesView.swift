@@ -9,7 +9,8 @@ import SwiftUI
 
 struct FavouritesView: View {
     
-    @State private var activitiesSet = ActivityData.shared.activities
+//    @State private var activitiesSet = ActivityData.shared.activities
+    @EnvironmentObject var activityData: ActivityData
     
     // currently logged user
     var currentUser: User? = {
@@ -22,19 +23,26 @@ struct FavouritesView: View {
         return user
     }()
     
-    var activities: [Activity] {
-        guard let currentUser = currentUser else {
-            return activitiesSet
-        }
-        return activitiesSet.filter { currentUser.preferences.favorites.contains($0.name) }
-    }
-    
     @Binding var isLoggedIn: Bool
+    
+    @State var activities: [Activity]
+//    {
+//        guard let currentUser = currentUser else {
+//            return activityData.activities
+//        }
+//        return activityData.activities.filter { currentUser.preferences.favorites.contains($0.name) }
+//    }
+
+    
+    
+    
     var body: some View {
         NavigationView{
             VStack{
                 List{
                     ForEach(activities, id: \.name) { activity in
+//                    for activityName in currentUser!.preferences.favorites) {
+//                        let activity = activityData.activities.first(where: ({$0.name == activityName}))
                         NavigationLink(destination: ActivityDetailsView(activity: activity, currentUser: currentUser!)) {
                             HStack {
                                 Image(activity.photo[0])
@@ -60,7 +68,7 @@ struct FavouritesView: View {
                         
                         for index in indexSet{
                             let activityToRemove = self.activities[index]
-                            
+                            activities.remove(at: index)
                             currentUser!.removeFromFavourites(activity: activityToRemove)
                             currentUser!.saveUserPreferences()
                         }
@@ -80,6 +88,9 @@ struct FavouritesView: View {
             .navigationTitle("Favourites")
             .navigationBarItems(trailing: logoutButton)
         }
+//        .onAppear(){
+//            updateFavAct()
+//        }
     }
     private var logoutButton: some View {
         Button(action: {

@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     
+    @EnvironmentObject private var activityData: ActivityData
+    
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var rememberMe: Bool = false
@@ -79,7 +81,7 @@ struct ContentView: View {
                     Toggle("Remember Me", isOn: $rememberMe)
                         .padding()
                     
-                    NavigationLink(destination: TabbedView(isLoggedIn: $isLoggedIn), isActive: $isLoggedIn) { // Use isLoggedIn binding
+                    NavigationLink(destination: TabbedView(isLoggedIn: $isLoggedIn).environmentObject(activityData), isActive: $isLoggedIn) { // Use isLoggedIn binding
                     }
                     .hidden()
                     
