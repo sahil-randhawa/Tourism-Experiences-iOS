@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Activity {
+struct Activity: Codable {
     let name: String
     let price: String
     let photo: [String]
@@ -30,6 +30,6 @@ class ActivityData:ObservableObject {
 
     ]
     
-    @Published var favAct: [Activity] = []
+//    @Published var favAct: [Activity] = []
 }
 

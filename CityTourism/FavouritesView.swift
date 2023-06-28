@@ -9,88 +9,77 @@ import SwiftUI
 
 struct FavouritesView: View {
     
-//    @State private var activitiesSet = ActivityData.shared.activities
+    // currently logged user
+    @EnvironmentObject var currentUser: User
+
     @EnvironmentObject var activityData: ActivityData
     
-    // currently logged user
-    var currentUser: User? = {
-        guard let userData = UserDefaults.standard.data(forKey: "CurrentUser"),
-              let user = try? PropertyListDecoder().decode(User.self, from: userData)
-        else {
-            return nil
-        }
-        print(user.email)
-        return user
-    }()
-    
     @Binding var isLoggedIn: Bool
-    
-    @State var activities: [Activity]
-//    {
-//        guard let currentUser = currentUser else {
-//            return activityData.activities
-//        }
-//        return activityData.activities.filter { currentUser.preferences.favorites.contains($0.name) }
-//    }
 
-    
-    
-    
     var body: some View {
         NavigationView{
             VStack{
+                if (currentUser.favorites.count == 0) {
+                    Text("You have no favorites added to the list.")
+                }
+                else{
                 List{
-                    ForEach(activities, id: \.name) { activity in
-//                    for activityName in currentUser!.preferences.favorites) {
-//                        let activity = activityData.activities.first(where: ({$0.name == activityName}))
-                        NavigationLink(destination: ActivityDetailsView(activity: activity, currentUser: currentUser!)) {
-                            HStack {
-                                Image(activity.photo[0])
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 80, height: 80)
-                                    .cornerRadius(8)
-                                VStack(alignment: .leading){
-                                    Text(activity.name)
-                                        .font(.headline)
-                                    
-                                    Text("\(activity.price) per head")
-                                        .font(.subheadline)
-                                    
-                                    Text("★ \(activity.starRating)/5")
-                                        .font(.subheadline)
-                                    Spacer()
-                                }.padding(.vertical)
-                            }// hstack
-                        } //navlink
+                    ForEach(currentUser.favorites.indices, id: \.self) { index in
+                        let currentActivity = activityData.activities.first (where: {$0.name == currentUser.favorites[index]})
+                        
+                        if let activity = currentActivity{
+                            NavigationLink(destination: ActivityDetailsView(activity: activity).environmentObject(currentUser)) {
+                                HStack {
+                                    Image(activity.photo[0])
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 80, height: 80)
+                                        .cornerRadius(8)
+                                    VStack(alignment: .leading){
+                                        Text(activity.name)
+                                            .font(.headline)
+                                        
+                                        Text("\(activity.price) per head")
+                                            .font(.subheadline)
+                                        
+                                        Text("★ \(activity.starRating)/5")
+                                            .font(.subheadline)
+                                        Spacer()
+                                    }.padding(.vertical)
+                                }// hstack
+                            } //navlink
+                        }// if
+                        
                     }//ForEach
-                    .onDelete(perform: { indexSet in
-                        
-                        for index in indexSet{
-                            let activityToRemove = self.activities[index]
-                            activities.remove(at: index)
-                            currentUser!.removeFromFavourites(activity: activityToRemove)
-                            currentUser!.saveUserPreferences()
-                        }
-                        
-                    })
+                    .onDelete{ indices in
+                        currentUser.favorites.remove(atOffsets: indices)
+                    }
                 } //list
+//                .onAppear(){
+//                    currentUser.favorites = UserDefaults.standard.array(forKey: "KEY_\(currentUser.email)_Preferences") as? [String] ?? []
+//                }
+//                .onChange(of: currentUser.favorites){ _ in
+//                    UserDefaults.standard.set(currentUser.favorites, forKey: "KEY_\(currentUser.email)_Preferences")
+//                }
 //                if(favouritesOnly){
                 Button{
-                    currentUser!.preferences.favorites.removeAll()
-                    currentUser!.saveUserPreferences()
+                    currentUser.favorites.removeAll()
+                    currentUser.saveUserPreferences()
                 }label:{
                     Text("Clear Favourites")
                 }
                 .padding()
-//                }
+                }
+            }//VStack
+            .onAppear(){
+                currentUser.favorites = UserDefaults.standard.array(forKey: "KEY_\(currentUser.email)_Preferences") as? [String] ?? []
+            }
+            .onChange(of: currentUser.favorites){ _ in
+                UserDefaults.standard.set(currentUser.favorites, forKey: "KEY_\(currentUser.email)_Preferences")
             }
             .navigationTitle("Favourites")
             .navigationBarItems(trailing: logoutButton)
-        }
-//        .onAppear(){
-//            updateFavAct()
-//        }
+        }//navView
     }
     private var logoutButton: some View {
         Button(action: {
@@ -104,8 +93,8 @@ struct FavouritesView: View {
     }
 
     private func logout() {
-        UserDefaults.standard.removeObject(forKey: "CurrentUser")
-        UserDefaults.standard.removeObject(forKey: "RememberMe")
+        UserDefaults.standard.removeObject(forKey: "KEY_CurrentUserEmail")
+        UserDefaults.standard.removeObject(forKey: "KEY_RememberMe")
         isLoggedIn.toggle()
 //        dismiss()
     }

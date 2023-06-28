@@ -10,30 +10,18 @@ import SwiftUI
 struct TabbedView: View {
     
     @Binding var isLoggedIn: Bool
-    @EnvironmentObject var activityData: ActivityData
     
     // currently logged user
-    var currentUser: User? = {
-        guard let userData = UserDefaults.standard.data(forKey: "CurrentUser"),
-              let user = try? PropertyListDecoder().decode(User.self, from: userData)
-        else {
-            return nil
-        }
-        print(user.email)
-        return user
-    }()
+    @EnvironmentObject var currentUser: User
+
+    @EnvironmentObject var activityData: ActivityData
     
-    var favActivities: [Activity] {
-        guard let currentUser = currentUser else {
-            return activityData.activities
-        }
-        return activityData.activities.filter { currentUser.preferences.favorites.contains($0.name) }
-    }
     
     var body: some View {
         NavigationView{
             TabView{
-                ActivitiesView(isLoggedIn: $isLoggedIn)
+                ActivitiesView(isLoggedIn: $isLoggedIn).environmentObject(currentUser)
+                    .environmentObject(activityData)
                     .tabItem {
                         VStack{
                             Image(systemName: "house")
@@ -41,7 +29,8 @@ struct TabbedView: View {
                         }
                         .padding(20)
                     }
-                FavouritesView(isLoggedIn: $isLoggedIn, activities: favActivities)
+                FavouritesView(isLoggedIn: $isLoggedIn).environmentObject(currentUser)
+                    .environmentObject(activityData)
                     .tabItem {
                         VStack{
                             Image(systemName: "heart.fill")
@@ -51,25 +40,10 @@ struct TabbedView: View {
                     }
             } //tabview
         }//navView
-        .environmentObject(activityData)
-//        .navigationBarItems(trailing: logoutButton)
         .navigationBarBackButtonHidden(true)
-        
+        .onAppear(){
+        }
     }//body
-//    private var logoutButton: some View {
-//        Button(action: {
-//            logout()
-//        }) {
-//            Text("Logout")
-//        }
-//    }
-//    
-//    private func logout() {
-//        UserDefaults.standard.removeObject(forKey: "CurrentUser")
-//        UserDefaults.standard.removeObject(forKey: "RememberMe")
-//        isLoggedIn.toggle()
-////        dismiss()
-//    }
 }
 
 //struct TabbedView_Previews: PreviewProvider {

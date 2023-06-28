@@ -11,12 +11,14 @@ struct ActivityDetailsView: View {
     
     let activity: Activity
     
-    let currentUser: User
-    
-    
+    // currently logged user
+    @EnvironmentObject var currentUser: User
     
     @State private var favIcon:String = "heart"
     
+//    @State var favActivities: [Activity]
+    
+//    @EnvironmentObject var favActivities: [Activity]
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -34,13 +36,6 @@ struct ActivityDetailsView: View {
                 }
                 .padding(.horizontal, 10)
             }
-//            HStack {
-//                ForEach(activity.photo, id: \.self) { photo in
-//                    Image(photo)
-//                        .resizable()
-//                        .aspectRatio(contentMode: .fit)
-//                }
-//            }.padding(.horizontal, 40)
             
             Text(activity.description)
                 .foregroundColor(.gray)
@@ -54,8 +49,6 @@ struct ActivityDetailsView: View {
                     Image(systemName: "star")
                         .foregroundColor(.gray)
                 }
-//                Text("\(activity.starRating)/5")
-//                    .foregroundColor(.gray)
             }
             
             HStack{
@@ -84,17 +77,12 @@ struct ActivityDetailsView: View {
                 }
             }
             
-            
             Text("Price: \(activity.price) per head")
             
             HStack {
                 Button(action: {
                     // Add the activity to favourites
                     
-//                    toggleFavorite()
-                    
-                    
-//                    if let currentUser = currentUser {
                         if isFavouriteActivity() {
                             currentUser.removeFromFavourites(activity: activity)
                             self.favIcon = "heart"
@@ -103,7 +91,6 @@ struct ActivityDetailsView: View {
                             self.favIcon = "heart.fill"
 
                         }
-//                    }
                     
                 }) {
                     HStack{
@@ -128,7 +115,7 @@ struct ActivityDetailsView: View {
                     }
                 }.buttonStyle(.bordered)
                 
-            }
+            }//HStack
             Spacer()
         }
         .padding()
@@ -139,14 +126,14 @@ struct ActivityDetailsView: View {
     
     private func isFavouriteActivity() -> Bool {
         
-        return currentUser.preferences.favorites.contains(activity.name)
+        return currentUser.favorites.contains(activity.name)
     }
 }
 
-struct ActivityDetailsView_Previews: PreviewProvider {
-    static var previews: some View {
-        let myactivity = ActivityData.shared.activities[0]
-        let user:User = User(email: "james", password: "james", preferences: UserPreferences(favorites: []))
-        ActivityDetailsView(activity: myactivity, currentUser: user)
-    }
-}
+//struct ActivityDetailsView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let myactivity = ActivityData.shared.activities[0]
+//        let user:User = User(email: "james", password: "james", preferences: UserPreferences(favorites: []))
+//        ActivityDetailsView(activity: myactivity, currentUser: user)
+//    }
+//}

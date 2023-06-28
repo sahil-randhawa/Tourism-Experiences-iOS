@@ -18,20 +18,13 @@ struct ContentView: View {
     @State private var showLoginPrompt: Bool = false
     
     let usersDataSet = [
-        User(email: "a", password: "1", preferences: UserPreferences(favorites: [])),
-        User(email: "vaisrav@gmail.com", password: "12345", preferences: UserPreferences(favorites: [])),
-        User(email: "sahil@gmail.com", password: "12345", preferences: UserPreferences(favorites: []))
+        User(email: "a", password: "1", favourites: []),
+        User(email: "vaisrav@gmail.com", password: "12345", favourites: []),
+        User(email: "sahil@gmail.com", password: "12345", favourites: [])
     ]
     
     // currently logged user
-    @State private var currentUser: User? = {
-        guard let userData = UserDefaults.standard.data(forKey: "CurrentUser"),
-              let user = try? PropertyListDecoder().decode(User.self, from: userData)
-        else {
-            return nil
-        }
-        return user
-    }()
+    @State private var currentUser : User = User()
     
     @State private var isLoggedIn: Bool = false
     
@@ -81,7 +74,7 @@ struct ContentView: View {
                     Toggle("Remember Me", isOn: $rememberMe)
                         .padding()
                     
-                    NavigationLink(destination: TabbedView(isLoggedIn: $isLoggedIn).environmentObject(activityData), isActive: $isLoggedIn) { // Use isLoggedIn binding
+                    NavigationLink(destination: TabbedView(isLoggedIn: $isLoggedIn).environmentObject(currentUser).environmentObject(activityData), isActive: $isLoggedIn) { // Use isLoggedIn binding
                     }
                     .hidden()
                     
@@ -103,14 +96,19 @@ struct ContentView: View {
                 .padding()
                 .onAppear {
                     
+                    if (UserDefaults.standard.string(forKey: "KEY_CurrentUserEmail") != "") {
+                        let userDataEmail = UserDefaults.standard.string(forKey: "KEY_CurrentUserEmail")
+                        currentUser = usersDataSet.first(where: ({$0.email == userDataEmail})) ?? User()
+                    }
                     fetchRememberMe()
                     
                     // rememberme check
-                    if rememberMe, let user = currentUser {
-                        email = user.email
-                        password = user.password
+                    if rememberMe {
+                        email = currentUser.email
+                        password = currentUser.password
                         login()
                     }
+                    
                 }// onappear - vstack
                 .alert(isPresented: $showLoginPrompt) {
                     Alert(
@@ -122,40 +120,39 @@ struct ContentView: View {
                 
             }
         }//navView
+        .navigationBarBackButtonHidden(true)
         
     }
     
     // Store rememberMe value in UserDefaults
     private func storeRememberMe() {
-        UserDefaults.standard.set(rememberMe, forKey: "RememberMe")
+        UserDefaults.standard.set(rememberMe, forKey: "KEY_RememberMe")
     }
     
     // Fetch rememberMe value from UserDefaults on application launch
     private func fetchRememberMe() {
-        rememberMe = UserDefaults.standard.bool(forKey: "RememberMe")
+        rememberMe = UserDefaults.standard.bool(forKey: "KEY_RememberMe")
     }
     
     func login() {
         // Perform login validation and user authentication here
         
-        // Example login validation:
         if email.isEmpty || password.isEmpty {
-            self.showLoginPrompt = true
             // Show an alert or provide an error message to the user
+            self.showLoginPrompt = true
             return
         }
         // user auth check
-        if let user = usersDataSet.first(where: { $0.email == email && $0.password == password }) {
+        if let user:User = usersDataSet.first(where: { $0.email == email && $0.password == password }) {
             //Success:
             
             // Load user preferences from UserDefaults
-            if let preferencesData = UserDefaults.standard.data(forKey: "\(user.email)_Preferences"),
-               let preferences = try? JSONDecoder().decode(UserPreferences.self, from: preferencesData) {
-                user.preferences = preferences
+            if let userFavList = UserDefaults.standard.array(forKey: "KEY_\(user.email)_Preferences") as? [String]{
+                user.favorites = userFavList
             }
             
             // Save the currently logged in user to UserDefaults for persistence
-            UserDefaults.standard.set(try? PropertyListEncoder().encode(user), forKey: "CurrentUser")
+            UserDefaults.standard.set(user.email, forKey: "KEY_CurrentUserEmail")
             
             currentUser = user
             storeRememberMe()

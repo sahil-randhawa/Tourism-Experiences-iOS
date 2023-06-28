@@ -9,46 +9,25 @@ import SwiftUI
 
 
 struct ActivitiesView: View {
-//    let activities = ActivityData.shared.activities
     
-    @State private var favouritesOnly: Bool = false
-    
-//    @State private var activitiesSet = ActivityData.shared.activities
-    @EnvironmentObject var activityData: ActivityData
     
     // currently logged user
-    var currentUser: User? = {
-        guard let userData = UserDefaults.standard.data(forKey: "CurrentUser"),
-              let user = try? PropertyListDecoder().decode(User.self, from: userData)
-        else {
-            return nil
-        }
-        print(user.email)
-        return user
-    }()
-    
-    var activities: [Activity] {
-        guard let currentUser = currentUser, favouritesOnly else {
-            return activityData.activities
-        }
-        return activityData.activities.filter { currentUser.preferences.favorites.contains($0.name) }
-    }
-    func setFav(){
-        activityData.favAct = activityData.activities.filter { currentUser!.preferences.favorites.contains($0.name) }
-    }
+    @EnvironmentObject var currentUser: User
 
+    
+    @EnvironmentObject var activityData: ActivityData
+    
     @Binding var isLoggedIn: Bool
+    
+//    @State private var favouritesOnly: Bool = false
     
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
         NavigationView{
             VStack{
-//            Toggle("Favourites", isOn: $favouritesOnly)
-//                    .padding(.vertical, 10)
-//                    .padding(.horizontal, 20)
-            List(activities, id: \.name) { activity in
-                NavigationLink(destination: ActivityDetailsView(activity: activity, currentUser: currentUser!)) {
+            List(activityData.activities, id: \.name) { activity in
+                NavigationLink(destination: ActivityDetailsView(activity: activity).environmentObject(currentUser)) {
                     HStack {
                         Image(activity.photo[0])
                             .resizable()
@@ -69,15 +48,6 @@ struct ActivitiesView: View {
                     }// hstack
                 } //navlink
             } //list
-            if(favouritesOnly){
-                Button{
-                    currentUser!.preferences.favorites.removeAll()
-                    currentUser!.saveUserPreferences()
-                    favouritesOnly = false
-                }label:{
-                    Text("Clear Favourites")
-                }.padding()
-            }
         }//vstack
             .navigationTitle("Toronto Experiences")
             .navigationBarItems(trailing: logoutButton)
@@ -85,12 +55,9 @@ struct ActivitiesView: View {
 //            .frame(maxWidth: .infinity)
 //            .padding(.vertical, 10)
         }// navView
-//        .onAppear{
-//            favouritesOnly = false
-//            activities = activitiesFilter()
-//        }
         
     }//body
+    
     private var logoutButton: some View {
         Button(action: {
             logout()
@@ -103,8 +70,8 @@ struct ActivitiesView: View {
     }
 
     private func logout() {
-        UserDefaults.standard.removeObject(forKey: "CurrentUser")
-        UserDefaults.standard.removeObject(forKey: "RememberMe")
+        UserDefaults.standard.removeObject(forKey: "KEY_CurrentUserEmail")
+        UserDefaults.standard.removeObject(forKey: "KEY_RememberMe")
         isLoggedIn.toggle()
 //        dismiss()
     }

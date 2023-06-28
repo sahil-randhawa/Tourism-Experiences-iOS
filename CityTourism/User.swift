@@ -7,54 +7,52 @@
 
 import Foundation
 
-class User: Codable {
-    let email: String
-    let password: String
-    var preferences: UserPreferences
+class User: ObservableObject {
+    var email: String
+    var password: String
+    @Published var favorites: [String]
     
-//    var favourites: [String] = []
     
-    init(email: String, password: String, preferences: UserPreferences) {
+    init(email: String, password: String, favourites: [String]) {
         self.email = email
         self.password = password
-        self.preferences = preferences
+        self.favorites = favourites
+    }
+    
+    init(){
+        self.email = ""
+        self.password = ""
+        self.favorites = []
     }
     
     func addToFavourites(activity: Activity) {
-        if !preferences.favorites.contains(activity.name) {
-            preferences.favorites.append(activity.name)
+        if !favorites.contains(activity.name) {
+            favorites.append(activity.name)
             print("Added to Favorites")
             saveUserPreferences()
         }
     }
-
+    
     func removeFromFavourites(activity: Activity) {
-        preferences.favorites.removeAll { $0 == activity.name }
+        favorites.removeAll { $0 == activity.name }
         print("Removed from Favorites")
         saveUserPreferences()
     }
-
-    func saveUserPreferences() {
-        if let preferencesData = try? JSONEncoder().encode(preferences) {
-            UserDefaults.standard.set(preferencesData, forKey: "\(email)_Preferences")
-        }
-    }
-
     
-//    // method to add an activity to favorites
-//    func addToFavourites(activity: Activity) {
-//        self.favourites.append(activity.name)
-//        print("Added to Favourites")
-//    }
-//
-//    // method to remove an activity from favorites
-//    func removeFromFavourites(activity: Activity) {
-//        favourites.removeAll { $0 == activity.name }
-//        print("Removed from Favourites")
-//    }
+    func saveUserPreferences() {
+        UserDefaults.standard.set(favorites, forKey: "KEY_\(email)_Preferences")
+    }
+    
 }
 
-struct UserPreferences: Codable {
-    var favorites: [String]
-}
+//class UserPreferences: ObservableObject {
+//    @Published var favorites: [String]
+//    init(favorites: [String]) {
+//        self.favorites = favorites
+//    }
+//}
+
+//struct UserPreferences: Codable {
+//    var favorites: [String]
+//}
 
