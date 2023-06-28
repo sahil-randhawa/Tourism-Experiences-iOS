@@ -18,9 +18,9 @@ struct ContentView: View {
     @State private var showLoginPrompt: Bool = false
     
     let usersDataSet = [
-        User(email: "a", password: "1", favourites: []),
-        User(email: "vaisrav@gmail.com", password: "12345", favourites: []),
-        User(email: "sahil@gmail.com", password: "12345", favourites: [])
+        User(email: "a", password: "1", name: "User A", favourites: []),
+        User(email: "vaisrav@gmail.com", password: "12345", name: "Vaisrav", favourites: []),
+        User(email: "sahil@gmail.com", password: "12345", name: "Sahil", favourites: [])
     ]
     
     // currently logged user
@@ -104,9 +104,9 @@ struct ContentView: View {
                     
                     // rememberme check
                     if rememberMe {
-                        email = currentUser.email
-                        password = currentUser.password
-                        login()
+                        self.email = currentUser.email
+                        self.password = currentUser.password
+//                        login()
                     }
                     
                 }// onappear - vstack
@@ -131,7 +131,7 @@ struct ContentView: View {
     
     // Fetch rememberMe value from UserDefaults on application launch
     private func fetchRememberMe() {
-        rememberMe = UserDefaults.standard.bool(forKey: "KEY_RememberMe")
+        self.rememberMe = UserDefaults.standard.bool(forKey: "KEY_RememberMe")
     }
     
     func login() {

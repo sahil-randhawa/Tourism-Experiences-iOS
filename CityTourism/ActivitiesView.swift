@@ -51,12 +51,22 @@ struct ActivitiesView: View {
         }//vstack
             .navigationTitle("Toronto Experiences")
             .navigationBarItems(trailing: logoutButton)
+            .navigationBarItems(leading: userProfile)
 //            .navigationBarTitleDisplayMode(.large)
 //            .frame(maxWidth: .infinity)
 //            .padding(.vertical, 10)
         }// navView
         
     }//body
+    
+    private var userProfile: some View {
+        HStack{
+            Image(systemName: "person.crop.circle")
+                .foregroundColor(.blue)
+            Text(currentUser.name)
+                .foregroundColor(.blue)
+        }
+    }
     
     private var logoutButton: some View {
         Button(action: {

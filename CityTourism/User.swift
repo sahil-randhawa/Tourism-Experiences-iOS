@@ -10,18 +10,21 @@ import Foundation
 class User: ObservableObject {
     var email: String
     var password: String
+    var name: String
     @Published var favorites: [String]
     
     
-    init(email: String, password: String, favourites: [String]) {
+    init(email: String, password: String, name: String, favourites: [String]) {
         self.email = email
         self.password = password
+        self.name = name
         self.favorites = favourites
     }
     
     init(){
         self.email = ""
         self.password = ""
+        self.name = ""
         self.favorites = []
     }
     

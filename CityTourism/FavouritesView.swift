@@ -14,6 +14,7 @@ struct FavouritesView: View {
 
     @EnvironmentObject var activityData: ActivityData
     
+    @State private var showClearPrompt: Bool = false
     @Binding var isLoggedIn: Bool
 
     var body: some View {
@@ -65,6 +66,7 @@ struct FavouritesView: View {
                 Button{
                     currentUser.favorites.removeAll()
                     currentUser.saveUserPreferences()
+                    showClearPrompt = true
                 }label:{
                     Text("Clear Favourites")
                 }
@@ -79,7 +81,23 @@ struct FavouritesView: View {
             }
             .navigationTitle("Favourites")
             .navigationBarItems(trailing: logoutButton)
+            .navigationBarItems(leading: userProfile)
+            .alert(isPresented: $showClearPrompt) {
+                Alert(
+                    title: Text("Message!"),
+                    message: Text("Favourites list cleared!"),
+                    dismissButton: .default(Text("OK"))
+                )
+            }//alert
         }//navView
+    }
+    private var userProfile: some View {
+        HStack{
+            Image(systemName: "person.crop.circle")
+                .foregroundColor(.blue)
+            Text(currentUser.name)
+                .foregroundColor(.blue)
+        }
     }
     private var logoutButton: some View {
         Button(action: {
