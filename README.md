@@ -27,3 +27,18 @@ The app offers the following features to enhance your tourism experience:
 
 Explore the city, discover amazing experiences, and make the most of your travel adventures.
 
+## Key Development Concepts
+- SwiftUI
+- Object-Oriented Programming (OOP)
+- Protocols
+- EnvironmentObjects
+- ObservedObject
+- UserDefaults
+- Codable and JSON parsing
+- Apple Human Interface Guidelines
+- TabView
+- Navigation Interface
+- User Interface Design (Layout, Views, Modifiers)
+- Error Handling and Validation
+- Accessibility and Inclusive Design
+- Git and Version Control
