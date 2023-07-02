@@ -1,6 +1,8 @@
 # Tourism-Experiences-iOS
 Welcome to Tourism-Experiences-iOS, a city tourism app built with SwiftUI and Xcode. (Personal Project)
 
+![Login Page](01_login.png) ![Home](02_home.png)
+
 ## Features
 The app offers the following features to enhance your tourism experience:
 
